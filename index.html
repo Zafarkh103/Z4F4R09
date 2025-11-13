@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Meri Secure Profile</title>
+    
+    <script>
+        function checkPassword() {
+            var correctPassword = "mera-secret"; // <-- Apna password change karna na bhoolna!
+            
+            // **CHANGE 1: Local Storage Check**
+            // Check karte hain agar 'unlocked' key browser ki memory (sessionStorage) mein hai
+            if (sessionStorage.getItem('profile-unlocked') === 'true') {
+                document.getElementById('profile-content').style.display = 'block';
+                document.getElementById('password-prompt').style.display = 'none';
+                return; // Agar unlocked hai toh aage ka code skip kar do.
+            }
+            
+            // Agar unlocked nahi hai, toh password prompt dikhao
+            document.getElementById('profile-content').style.display = 'none';
+            var passwordBox = document.getElementById('password-prompt');
+            passwordBox.style.display = 'flex';
+            
+            document.getElementById('submit-password').onclick = function() {
+                var userPassword = document.getElementById('user-input-password').value;
+
+                if (userPassword === correctPassword) {
+                    // **CHANGE 2: Local Storage Set**
+                    sessionStorage.setItem('profile-unlocked', 'true'); // Sahi password par key save kar do
+                    passwordBox.style.display = 'none';
+                    document.getElementById('profile-content').style.display = 'block'; 
+                } else {
+                    alert("❌ Ghalat Password! Dobara koshish karein.");
+                    document.getElementById('user-input-password').value = ''; 
+                }
+            };
+        }
+    </script>
+    
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%); 
+            color: #333;
+            min-height: 100vh;
+            
+            /* **CHANGE 3: Zoom Fix (Thora Sa Help)** */
+            /* Yeh line zoom ko fix nahi karti, lekin layout ko theek rakhti hai. */
+            overflow-x: hidden; 
+        }
+
+        /* 🔒 PASSWORD SCREEN STYLING (No Change) */
+        #password-prompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .auth-box {
+            background: #2c2a38;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.2);
+            color: white;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* (Baaki auth-box styles wohi hain) */
+
+        .auth-box input[type="password"] {
+            /* ... */
+        }
+        
+        .auth-box button {
+            /* ... */
+        }
+
+        /* 🖼️ PROFILE PAGE STYLING */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            animation: slideIn 1s ease-out;
+        }
+
+        /* (Header styles wohi hain) */
+        
+        /* Image Section */
+        .image-section {
+            display: flex; /* Flexbox use kiya takay images theek se arrange hon */
+            flex-wrap: wrap; /* Jab screen choti ho toh images neeche aa jayen */
+            gap: 25px;
+            justify-content: center; /* Images ko center mein rakhega */
+        }
+        
+        .image-item {
+            /* **CHANGE 4: Image Size Control** */
+            /* Har image block ki max width set ki, taake woh chota rahein */
+            width: 100%; /* Default 100% of parent */
+            max-width: 300px; /* Maximum size 300px */
+            
+            background: #f9f9f9;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            overflow: hidden;
+            border-radius: 8px; /* Thoda sa round corners */
+            text-align: center;
+        }
+
+        .image-item img {
+            /* **CHANGE 5: Image Height Control** */
+            width: 100%; /* Image box ki poori width le */
+            height: 200px; /* Fixed height set ki taake saari images same size ki dikhein */
+            object-fit: cover; /* Yeh zaroori hai! Taake image cut ho par kharab na ho. */
+            transition: transform 0.5s;
+        }
+        .image-item img:hover {
+            transform: scale(1.05);
+        }
+        
+        .caption {
+            padding: 10px;
+            margin: 0;
+            color: #6a6a6a;
+        }
+    </style>
+</head>
+
+<body onload="checkPassword()"> 
+<div id="password-prompt" style="display: none;">
+        <div class="auth-box">
+            <h2>🔒 Access Zaroori Hai</h2>
+            <p>Yeh profile page dekhne ke liye password darj karein:</p>
+            <input type="password" id="user-input-password" placeholder="Password yahan likhein">
+            <button id="submit-password">Daakhil Ho Jayein</button>
+        </div>
+    </div>
+    
+    <div id="profile-content" style="display: none;">
+        <div class="container">
+            
+            <div class="header-content">
+                <img src="profile-logo.jpg" alt="Profile Logo/Image" class="profile-logo"> 
+                <h1>👋 (My Profile)</h1>
+            </div>
+
+            <p>Mera naam **[ZAFAR ALI]** hai. Yeh meri zindgai ke kuch khas lamhon ki tasveerein hain, bachpan se lekar ab tak. Inhein dekhne ka shukriya!</p>
+
+            ---
+
+            <h2>👶 Bachpan Ke Lamhe (Old Memories)</h2>
+            
+            <div class="image-section">
+                <div class="image-item">
+                    <img src="bachpan-1.jpg" alt="Bachpan ki tasveer 1">
+                    <p class="caption">2010: Jab main sirf 5 saal ka tha.</p>
+                </div>
+                
+                <div class="image-item">
+                    <img src="bachpan-2.jpg" alt="Bachpan ki tasveer 2">
+                    <p class="caption">2018: School ka  din! Kitna masoom tha.</p>
+                </div>
+                
+                <div class="image-item">
+                    <img src="bachpan-3.jpg" alt="Family Photo">
+                    <p class="caption">2021: Alone  Mod Picture.</p>
+                </div>
+                
+                </div>
+
+            ---
+
+            <h2>👨‍🎓 Aaj Ke Lamhe (Recent Times)</h2>
+
+            <div class="image-section">
+                <div class="image-item">
+                    <img src="current-2024.jpg" alt="Current Photo 2020">
+                    <p class="caption">2023 ki Pictures mein.</p>
+                </div>
+                
+                <div class="image-item">
+                    <img src="current-2025.jpg" alt="Current Photo 2025">
+                    <p class="caption">2025 ki tasveer: Now days.</p>
+                </div>
+
+                </div>
+
+            ---
+            
+            <h2>✍️ Mere Khayalaat (My Thoughts)</h2>
+            <p>Mujhe lagta hai zindgi ek safar hai, jismein har lamha naya sabak sikhata hai. Bachpan ki yaadein hamesha dil ke kareeb rahengi, aur main umeed karta hoon ke aane wala waqt bhi behter ho.</p>
+
+        </div>
+    </div>
+</body>
+</html>
